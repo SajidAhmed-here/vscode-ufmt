@@ -38,6 +38,9 @@ jobs:
       - name: Fix Node.js type compatibility
         run: npm install --no-save --package-lock=false @types/node@20
 
+      - name: Use compatible ESLint version
+        run: npm install --no-save --package-lock=false eslint@8.57.1
+
       - name: Run tests
         run: npm test
 
