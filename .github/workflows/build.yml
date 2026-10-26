@@ -35,11 +35,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Fix Node.js type compatibility
-        run: npm install --no-save --package-lock=false @types/node@20
+      - name: Apply temporary CI compatibility fixes
+        run: npm install --no-save --package-lock=false @types/node@20 eslint@8.57.1
 
-      - name: Use compatible ESLint version
-        run: npm install --no-save --package-lock=false eslint@8.57.1
+      - name: Verify dependency versions
+        run: npm ls @types/node @types/fs-extra minipass eslint
 
       - name: Run tests
         run: npm test
