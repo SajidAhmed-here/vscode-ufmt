@@ -36,20 +36,31 @@ jobs:
         run: npm ci
 
       - name: Apply temporary CI compatibility fixes
-        run: npm install --no-save --package-lock=false @types/node@20 eslint@8.57.1
+        run: npm install --no-save --package-lock=false --legacy-peer-deps @types/node@20 eslint@8.57.1
 
-      - name: Verify dependency versions
-        run: npm ls @types/node @types/fs-extra minipass eslint
+      - name: Compile tests
+        run: npx tsc -p . --outDir out --skipLibCheck
+
+      - name: Compile extension
+        run: npm run compile
+
+      - name: Run lint
+        env:
+          ESLINT_USE_FLAT_CONFIG: 'false'
+        run: npm run lint
 
       - name: Run tests
-        run: npm test
+        run: node ./out/test/runTest.js
+
+      - name: Package extension
+        run: npm run package
 
       - name: Upload Artifact
         if: success()
         uses: actions/upload-artifact@v4
         with:
           name: build-artifacts
-          path: ./dist
+          path: dist/
           if-no-files-found: warn
 
   publish:
